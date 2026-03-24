@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import LoginScreen from './components/LoginScreen';
+import { useAuth } from './hooks/useAuth';
 import Header from './components/Header';
 import ActiveFilterChips from './components/ActiveFilterChips';
 import FilterDrawer from './components/FilterDrawer';
@@ -35,8 +37,21 @@ export default function App() {
     duplicatePrompt,
   } = usePrompts();
 
+  const { session, loading: authLoading, signIn, signOut } = useAuth();
   const { modalState, openView, openAdd, openEdit, closeAll } = useModal();
   const [filterOpen, setFilterOpen] = useState(false);
+
+  if (authLoading) {
+    return (
+      <div className="login-screen">
+        <div className="loading-spinner" style={{ width: 36, height: 36 }} />
+      </div>
+    );
+  }
+
+  if (!session) {
+    return <LoginScreen onLogin={signIn} />;
+  }
 
   const handleSave = (data) => {
     if (modalState.edit) updatePrompt(modalState.edit.id, data);
@@ -53,6 +68,7 @@ export default function App() {
         sort={sort}
         onSort={setSort}
         onAddPrompt={openAdd}
+        onSignOut={signOut}
       />
 
       <ActiveFilterChips filters={filters} onChange={setFilters} />
