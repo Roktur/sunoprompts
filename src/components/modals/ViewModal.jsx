@@ -3,7 +3,7 @@ import ModalOverlay from './ModalOverlay';
 import ConfirmDelete from './ConfirmDelete';
 import GenreBadge from '../GenreBadge';
 import TagPill from '../TagPill';
-import { getGradient } from '../../utils/gradients';
+import { getGradient, getPresetGradient } from '../../utils/gradients';
 import { copyToClipboard } from '../../utils/copyToClipboard';
 
 export default function ViewModal({ prompt, onClose, onEdit, onDelete, onDuplicate }) {
@@ -12,7 +12,8 @@ export default function ViewModal({ prompt, onClose, onEdit, onDelete, onDuplica
 
   if (!prompt) return null;
 
-  const { title, prompt: text, genre, mood, bpm, language, tags, image, isFavorite } = prompt;
+  const { title, prompt: text, genre, mood, bpm, language, tags, image, coverPreset, isFavorite } = prompt;
+  const coverBg = coverPreset ? getPresetGradient(coverPreset) : getGradient(genre);
 
   const handleCopy = async () => {
     await copyToClipboard(text);
@@ -33,7 +34,7 @@ export default function ViewModal({ prompt, onClose, onEdit, onDelete, onDuplica
         {image ? (
           <img src={image} alt={title} className="view-modal__image" />
         ) : (
-          <div className="view-modal__gradient" style={{ background: getGradient(genre) }} />
+          <div className="view-modal__gradient" style={{ background: coverBg }} />
         )}
       </div>
 

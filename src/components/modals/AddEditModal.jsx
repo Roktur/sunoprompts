@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import ModalOverlay from './ModalOverlay';
 import TagInput from '../TagInput';
 import ComboBox from '../ComboBox';
-import { getGradient } from '../../utils/gradients';
+import { getGradient, getPresetGradient, presetCovers } from '../../utils/gradients';
 
 const empty = {
   title: '',
@@ -12,6 +12,7 @@ const empty = {
   bpm: '',
   tags: [],
   image: null,
+  coverPreset: null,
 };
 
 export default function AddEditModal({ open, mode, initialData, onClose, onSave, genres, moods }) {
@@ -31,6 +32,7 @@ export default function AddEditModal({ open, mode, initialData, onClose, onSave,
           bpm: initialData.bpm || '',
           tags: initialData.tags || [],
           image: initialData.image || null,
+          coverPreset: initialData.coverPreset || null,
         });
       } else {
         setForm(empty);
@@ -44,7 +46,9 @@ export default function AddEditModal({ open, mode, initialData, onClose, onSave,
   const loadImageFile = (file) => {
     if (!file || !file.type.startsWith('image/')) return;
     const reader = new FileReader();
-    reader.onload = (e) => set('image', e.target.result);
+    reader.onload = (e) => {
+      setForm((f) => ({ ...f, image: e.target.result, coverPreset: null }));
+    };
     reader.readAsDataURL(file);
   };
 
@@ -78,9 +82,9 @@ export default function AddEditModal({ open, mode, initialData, onClose, onSave,
 
       <div className="form-body">
 
-        {/* Cover image upload */}
+        {/* Cover */}
         <div className="form-field">
-          <label className="form-label">Cover Image</label>
+          <label className="form-label">Cover</label>
           <div
             className={`image-upload${dragOver ? ' image-upload--drag' : ''}`}
             onClick={() => fileInputRef.current?.click()}
@@ -91,25 +95,47 @@ export default function AddEditModal({ open, mode, initialData, onClose, onSave,
             {form.image ? (
               <>
                 <img src={form.image} alt="Cover preview" className="image-upload__preview" />
-                <button
-                  className="image-upload__remove"
-                  onClick={(e) => { e.stopPropagation(); set('image', null); }}
-                  aria-label="Remove image"
-                >×</button>
               </>
             ) : (
-              <div className="image-upload__gradient" style={{ background: getGradient(form.genre) }}>
+              <div
+                className="image-upload__gradient"
+                style={{ background: form.coverPreset ? getPresetGradient(form.coverPreset) : getGradient(form.genre) }}
+              >
                 <div className="image-upload__placeholder">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  <span>Click or drag &amp; drop image</span>
+                  <span>{form.coverPreset ? 'Click to upload custom image' : 'Click or drag & drop image'}</span>
                   <span className="image-upload__hint">JPG, PNG, WEBP</span>
                 </div>
               </div>
             )}
+            {(form.image || form.coverPreset) && (
+              <button
+                className="image-upload__remove"
+                onClick={(e) => { e.stopPropagation(); setForm((f) => ({ ...f, image: null, coverPreset: null })); }}
+                aria-label="Remove cover"
+              >×</button>
+            )}
           </div>
           <input ref={fileInputRef} type="file" accept="image/*" className="image-upload__input" onChange={(e) => loadImageFile(e.target.files[0])} />
+
+          {/* Preset covers */}
+          <div className="cover-presets">
+            <span className="cover-presets__label">Preset covers</span>
+            <div className="cover-presets__grid">
+              {presetCovers.map((preset) => (
+                <button
+                  key={preset.id}
+                  type="button"
+                  className={`cover-preset${form.coverPreset === preset.id ? ' cover-preset--active' : ''}`}
+                  style={{ background: preset.gradient }}
+                  title={preset.name}
+                  onClick={() => setForm((f) => ({ ...f, coverPreset: preset.id, image: null }))}
+                />
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="form-field">
