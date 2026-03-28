@@ -13,6 +13,7 @@ function toRow(p) {
     bpm: p.bpm ?? null,
     is_favorite: p.isFavorite ?? false,
     image: p.image ?? null,
+    cover_preset: p.coverPreset ?? null,
     created_at: p.createdAt,
   };
 }
@@ -28,6 +29,7 @@ function fromRow(r) {
     bpm: r.bpm,
     isFavorite: r.is_favorite,
     image: r.image,
+    coverPreset: r.cover_preset ?? null,
     createdAt: r.created_at,
   };
 }
@@ -61,8 +63,9 @@ export async function updatePrompt(id, changes) {
   if ('genre' in changes)      row.genre       = changes.genre;
   if ('mood' in changes)       row.mood        = changes.mood;
   if ('bpm' in changes)        row.bpm         = changes.bpm;
-  if ('isFavorite' in changes) row.is_favorite = changes.isFavorite;
-  if ('image' in changes)      row.image       = changes.image;
+  if ('isFavorite' in changes)   row.is_favorite  = changes.isFavorite;
+  if ('image' in changes)        row.image        = changes.image;
+  if ('coverPreset' in changes)  row.cover_preset = changes.coverPreset;
 
   const { data, error } = await supabase
     .from('prompts')
