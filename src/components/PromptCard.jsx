@@ -1,11 +1,12 @@
 import React from 'react';
 import GenreBadge from './GenreBadge';
 import TagPill from './TagPill';
-import { getGradient, getPresetGradient } from '../utils/gradients';
+import { getGradient, getPreset } from '../utils/gradients';
 
 const PromptCard = React.memo(function PromptCard({ prompt, onOpen, onToggleFavorite }) {
   const { title, prompt: text, genre, mood, bpm, tags, image, coverPreset, isFavorite } = prompt;
-  const coverBg = coverPreset ? getPresetGradient(coverPreset) : getGradient(genre);
+  const preset = coverPreset ? getPreset(coverPreset) : null;
+  const coverBg = preset ? preset.gradient : getGradient(genre);
 
   const handleCardClick = (e) => {
     if (e.target.closest('.card__star')) return;
@@ -26,7 +27,9 @@ const PromptCard = React.memo(function PromptCard({ prompt, onOpen, onToggleFavo
         {image ? (
           <img src={image} alt={title} className="card__image" loading="lazy" />
         ) : (
-          <div className="card__gradient" style={{ background: coverBg }} />
+          <div className="card__gradient" style={{ background: coverBg }}>
+            {preset?.label && <span className="card__cover-label">{preset.label}</span>}
+          </div>
         )}
         <button
           className={`card__star${isFavorite ? ' card__star--active' : ''}`}

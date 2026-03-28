@@ -1126,6 +1126,50 @@ body {
   transform: scale(1.08);
 }
 
+.cover-preset--labeled {
+  width: auto;
+  padding: 0 10px;
+  min-width: 80px;
+  font-size: 0.68rem;
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+}
+
+.cover-preset__text {
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ─── Card cover label ────────────────────────────────────────── */
+.card__gradient {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card__cover-label {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  user-select: none;
+}
+
+.view-modal__gradient {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view-modal__gradient .card__cover-label {
+  font-size: 1.8rem;
+}
+
 /* ─── Responsive ──────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .header__inner { gap: 10px; }

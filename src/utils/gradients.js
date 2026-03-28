@@ -32,8 +32,17 @@ export const presetCovers = [
   { id: 'coral',    name: 'Coral',    gradient: 'linear-gradient(135deg, #fb923c, #f472b6)' },
   { id: 'storm',    name: 'Storm',    gradient: 'linear-gradient(135deg, #374151, #6366f1)' },
   { id: 'lavender', name: 'Lavender', gradient: 'linear-gradient(135deg, #a78bfa, #f0abfc)' },
+  { id: 'test-crimson', name: 'Тестовый 1', gradient: 'linear-gradient(135deg, #7f1d1d, #dc2626)', label: 'Тестовый' },
+  { id: 'test-teal',    name: 'Тестовый 2', gradient: 'linear-gradient(135deg, #134e4a, #0d9488)', label: 'Тестовый' },
+  { id: 'test-indigo',  name: 'Тестовый 3', gradient: 'linear-gradient(135deg, #312e81, #7c3aed)', label: 'Тестовый' },
+  { id: 'test-amber',   name: 'Тестовый 4', gradient: 'linear-gradient(135deg, #78350f, #d97706)', label: 'Тестовый' },
+  { id: 'test-slate',   name: 'Тестовый 5', gradient: 'linear-gradient(135deg, #0f172a, #475569)', label: 'Тестовый' },
 ];
 
 export function getPresetGradient(id) {
   return presetCovers.find((p) => p.id === id)?.gradient || null;
+}
+
+export function getPreset(id) {
+  return presetCovers.find((p) => p.id === id) || null;
 }

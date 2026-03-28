@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import ModalOverlay from './ModalOverlay';
 import TagInput from '../TagInput';
 import ComboBox from '../ComboBox';
-import { getGradient, getPresetGradient, presetCovers } from '../../utils/gradients';
+import { getGradient, getPreset, presetCovers } from '../../utils/gradients';
 
 const empty = {
   title: '',
@@ -99,7 +99,7 @@ export default function AddEditModal({ open, mode, initialData, onClose, onSave,
             ) : (
               <div
                 className="image-upload__gradient"
-                style={{ background: form.coverPreset ? getPresetGradient(form.coverPreset) : getGradient(form.genre) }}
+                style={{ background: form.coverPreset ? getPreset(form.coverPreset)?.gradient : getGradient(form.genre) }}
               >
                 <div className="image-upload__placeholder">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -128,11 +128,13 @@ export default function AddEditModal({ open, mode, initialData, onClose, onSave,
                 <button
                   key={preset.id}
                   type="button"
-                  className={`cover-preset${form.coverPreset === preset.id ? ' cover-preset--active' : ''}`}
+                  className={`cover-preset${preset.label ? ' cover-preset--labeled' : ''}${form.coverPreset === preset.id ? ' cover-preset--active' : ''}`}
                   style={{ background: preset.gradient }}
                   title={preset.name}
                   onClick={() => setForm((f) => ({ ...f, coverPreset: preset.id, image: null }))}
-                />
+                >
+                  {preset.label && <span className="cover-preset__text">{preset.label}</span>}
+                </button>
               ))}
             </div>
           </div>
